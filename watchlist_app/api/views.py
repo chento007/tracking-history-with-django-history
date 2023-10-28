@@ -20,23 +20,25 @@ from rest_framework.permissions import IsAuthenticated
 
 from django.shortcuts import get_object_or_404
 
-class TrackHistory(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = HistorySerializer
+# class TrackHistory(generics.RetrieveUpdateDestroyAPIView):
+#     serializer_class = HistorySerializer
 
-    def get_queryset(self):
-        # Adjust the query below to match your use case
-        return History.objects.all()
+#     def get_queryset(self):
+#         # Adjust the query below to match your use case
+#         return History.objects.all()
     
-    def retrieve(self, request, *args, **kwargs):
+#     def retrieve(self, request, *args, **kwargs):
 
-        instance = self.get_object()  # Get the model instance
-        history = instance.history.all()  # Now you can access the history attribute
-        serializer = HistoricalRecordSerializer(history, many=True)  # Serialize the historical records with the new serializer
-        return Response(serializer.data)  # Return the serialized data
+#         instance = self.get_object()  # Get the model instance
+#         history = instance.history.all()  # Now you can access the history attribute
+#         serializer = HistoricalRecordSerializer(history, many=True)  # Serialize the historical records with the new serializer
+#         return Response(serializer.data)  # Return the serialized data
 
 
 
 class StreamPlatformVS(viewsets.ViewSet):
+    
+    permission_classes =[IsAuthenticated]
 
     def list(self, request):
 
@@ -47,7 +49,6 @@ class StreamPlatformVS(viewsets.ViewSet):
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
-
         queryset = StreamPlatform.objects.all()
         watchlist = get_object_or_404(queryset, pk=pk)
         serializer = StreamPlatformSerializer(
@@ -65,61 +66,63 @@ class StreamPlatformVS(viewsets.ViewSet):
             return Response(serilizer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class StreamPlatformVS(viewsets.ModelViewSet):
-    queryset = StreamPlatform.objects.all()
-    serializer_class = StreamPlatformSerializer
+# class StreamPlatformVS(viewsets.ModelViewSet):
+
+#     queryset = StreamPlatform.objects.all()
+#     serializer_class = StreamPlatformSerializer
 
 # create review base on specified movie with generic
 
 
-class ReviewCreate(generics.CreateAPIView):
+# class ReviewCreate(generics.CreateAPIView):
 
-    serializer_class = ReviewSerializer
+#     serializer_class = ReviewSerializer
     
-    def get_queryset(self):
-        return Review.objects.all()
+#     def get_queryset(self):
+#         return Review.objects.all()
 
-    def perform_create(self, serializer):
+#     def perform_create(self, serializer):
 
-        pk = self.kwargs.get('pkf')
-        watchlist = WatchList.objects.get(pk=pk)
+#         pk = self.kwargs.get('pkf')
+#         watchlist = WatchList.objects.get(pk=pk)
 
-        review_user = self.request.user
+#         review_user = self.request.user
         
-        review_queryset = Review.objects.filter(
-            watchlist=WatchList, review_user=review_user)
+#         review_queryset = Review.objects.filter(
+#             watchlist=WatchList, review_user=review_user)
 
-        if review_queryset.exists:
-            raise ValidationError("You have already reviewed this watchlist")
+#         if review_queryset.exists:
+#             raise ValidationError("You have already reviewed this watchlist")
 
-        serializer.save(watchlist=watchlist, review_user=review_user)
+#         serializer.save(watchlist=watchlist, review_user=review_user)
 
-        return super().perform_create(serializer)
+#         return super().perform_create(serializer)
 
 
 # get review list with generic
-class ReviewList(generics.ListCreateAPIView):
+# class ReviewList(generics.ListCreateAPIView):
 
-    serializer_class = ReviewSerializer
     
-    permission_classes =[AdminOrReadOnly]
+#     serializer_class = ReviewSerializer
+    
+#     permission_classes =[AdminOrReadOnly]
 
 
-    def get_queryset(self):
+#     def get_queryset(self):
         
-        pk = self.kwargs['pk']
-        return Review.objects.filter(watchlist=pk)
+#         pk = self.kwargs['pk']
+#         return Review.objects.filter(watchlist=pk)
 
 # get review detail by id with generic
 
 
-class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
+# class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
 
-    queryset = Review.objects.all() 
+#     queryset = Review.objects.all() 
 
-    serializer_class = ReviewSerializer
+#     serializer_class = ReviewSerializer
 
-    permission_classes=[ReviewUserOrReadOnly]
+#     permission_classes=[ReviewUserOrReadOnly]
 
 # class ReviewDetail(mixins.RetrieveModelMixin,generics.GenericAPIView):
 #     queryset = Review.objects.all()

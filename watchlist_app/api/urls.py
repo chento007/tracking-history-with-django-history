@@ -1,6 +1,6 @@
 
 from django.urls import path, include
-from watchlist_app.api.views import (ReviewDetail,ReviewList,ReviewCreate,StreamPlatformVS,TrackHistory)
+from watchlist_app.api.views import (StreamPlatformVS)
 from rest_framework.routers import DefaultRouter
 from rest_framework import permissions
 
@@ -17,11 +17,11 @@ urlpatterns =   [
     path("",include(router.urls)),
 
 
-    path("stream/<int:pk>/review-create", ReviewCreate.as_view(),name="review-create"),
-    path("stream/", ReviewList.as_view(), name="stream"),
-    path('stream/<int:pk>/review', ReviewDetail.as_view(), name='streamplatform-detail'),
-    path('history/<int:pk>', TrackHistory.as_view(), name='history-detail'),
-    path('history/', TrackHistory.as_view(), name='history-list'),
+    # path("stream/<int:pk>/review-create", ReviewCreate.as_view(),name="review-create"),
+    # path("stream/", ReviewList.as_view(), name="stream"),
+    # path('stream/<int:pk>/review', ReviewDetail.as_view(), name='streamplatform-detail'),
+    # path('history/<int:pk>', TrackHistory.as_view(), name='history-detail'),
+    # path('history/', TrackHistory.as_view(), name='history-list'),
 
 
 
